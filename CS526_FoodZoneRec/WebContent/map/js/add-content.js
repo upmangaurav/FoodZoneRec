@@ -1,18 +1,39 @@
 var mymap = L.map('mapid', {drawControl: true}).setView([36.114647, -115.172813], 12);
-
-
-
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
     maxZoom: 18,
     id: 'mapbox.streets',
     accessToken: 'pk.eyJ1IjoibGc1ODUiLCJhIjoiY2pmOGU5YmExMXRiazJ4cDR5dXFhMjB4NiJ9.ejyGusnAESNwefV4T6Sh8A'
 }).addTo(mymap);
+newMarkerGroup = new L.LayerGroup();
+mymap.on('click', addMarker);
 
-//var recommended_zips = ['89109','89119','89102','89103','89117','89118','89052','89123','89014','89146'];
-//var recommended_zips2 = ['85251','85281','85260','85308','85032','85016','85254','85282','85226','85224']
-var recommended_zips = ['89109','89119','89102','89103','89146'];
-var recommended_zips2 = ['85251','85281','85260','85308','85224']
+
+function addMarker(e){
+//    var newMarker = new L.marker(e.latlng,{bounceOnAdd: true}).addTo(mymap);
+//    newMarker.on('click', function(){
+//        newMarker.bounce({duration: 500, height: 100});
+//    })
+
+    var marker = L.marker(e.latlng, {
+      draggable: true,
+      title: "Resource location",
+      alt: "Resource Location",
+      riseOnHover: true
+    }).addTo(mymap)
+    .bindPopup(e.latlng.toString()).openPopup();
+
+  // Update marker on changing it's position
+  marker.on("dragend", function(ev) {
+
+    var chagedPos = ev.target.getLatLng();
+    this.bindPopup(chagedPos.toString()).openPopup();
+
+  });
+}
+
+var recommended_zips = ['89109','89119','89102','89103','89117','89118','89052','89123','89014','89146'];
+var recommended_zips2 = ['85251','85281','85260','85308','85032','85016','85254','85282','85226','85224']
 var colors = ['#800026','#BD0026','#E31A1C','#FC4E2A','#FD8D3C','#FEB24C','#FED976','#FFEDA0','#ffffcc','#ffffcc'];
 // colors are get from the small tool: colorbrewer2.org
 // multihue sequential
@@ -32,7 +53,14 @@ for (var k=0; k<recommended_zips.length;k++){
             poly[i][j] = [v2, v1];
         }
         var thePolygon = L.polygon(poly[i],{color: colors[k]}).addTo(mymap);
-        thePolygon.bindPopup(recommended_zips[k])
+        //thePolygon.bindPopup(recommended_zips[k]).openPopup()
+        thePolygon.bindPopup("RecZip:" + recommended_zips[k]);
+        thePolygon.on('mouseover', function (e) {
+            this.openPopup();
+        });
+        thePolygon.on('mouseout', function (e) {
+            this.closePopup();
+        });
     }
 }
 
@@ -51,7 +79,14 @@ for (var k=0; k<recommended_zips2.length;k++){
             poly2[i][j] = [v2, v1];
         }
         var thePolygon2 = L.polygon(poly2[i],{color: colors[k]}).addTo(mymap);
-        thePolygon2.bindPopup(recommended_zips[k])
+        //thePolygon2.bindPopup(recommended_zips[k]).openPopup()
+        thePolygon2.bindPopup("RecZip:" + recommended_zips2[k]);
+        thePolygon2.on('mouseover', function (e) {
+            this.openPopup();
+        });
+        thePolygon2.on('mouseout', function (e) {
+            this.closePopup();
+        });
     }
 }
 
@@ -126,5 +161,6 @@ success: function(data) {
 }
 }).error(function() {});
 */
+
 
 
