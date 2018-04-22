@@ -154,15 +154,32 @@ def apicall():
         
         conn = mysql.connect()
         cursor =conn.cursor()
+        cats = request.args.getlist('category')
+        print(cats)
+        
+#         placeholder= '?' # For SQLite. See DBAPI paramstyle.
+#         placeholders= ', '.join(placeholder * len(cats))
+#         print(placeholders)
+        
+        query = 'select business.latitude, business.longitude from business, category where category.business_id = business.id and postal_code in(' + ','.join(map(str, topZips)) + ') and category in {0} '.format(tuple(cats))
+        
+        print(query)
+        
+        cursor.execute(query)
+
         
 #         tl = tuple(topZips)
 #         param = {'tl', tl}
         
-        cursor.execute('select longitude, latitude from business where postal_code in(' + ','.join(map(str, topZips)) + ')')
+#         cursor.execute("select latitude, longitude from business where postal_code in(" + ",".join(map(str, topZips)) + ")")
+#         cursor.execute("select business.latitude, business.longitude from business, category where category.business_id = business.id and postal_code in(" + ",".join(map(str, topZips)) + ") and category in(" + ",".join(map(str, cats)) + ")")
+
         data = cursor.fetchall()
         print(data)
+        print(len(data))
+        print(type(data))
         
-        return jsonify(topZips)
+        return jsonify(data)
         
 
     except Exception as e:
