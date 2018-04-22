@@ -154,8 +154,11 @@ def apicall():
         
         conn = mysql.connect()
         cursor =conn.cursor()
-
-        cursor.execute("select longitude, latitude from business where postal_code in ('85282', '89147');")
+        
+#         tl = tuple(topZips)
+#         param = {'tl', tl}
+        
+        cursor.execute('select longitude, latitude from business where postal_code in(' + ','.join(map(str, topZips)) + ')')
         data = cursor.fetchall()
         print(data)
         
