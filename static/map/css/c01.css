@@ -1,0 +1,15 @@
+/*@import url('https://fonts.googleapis.com/css?family=Tangerine')*/
+h1{
+  font-family: 'Amatic+SC', cursive;
+  font-size: 48px;
+  text-shadow: 4px 4px 4px #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  text-align : center;
+}
+
+body{
+    background-color = #ffffff
+}
+
+#mapid { height: 600px;}
