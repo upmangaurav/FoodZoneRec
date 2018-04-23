@@ -18,12 +18,89 @@
 </head>
 <body>
     <h1> FoodRec Zips </h1>
-    <div id="mapid"></div>
+    <section id = "themap">
+        <div id="mapid"></div>
+    </section>
 
     <aside>
-        <section class = "Potential Areas of Profits">
-
-        </section>
+        <!--<section class = "Potential Areas of Profits">-->
+        <!--<p id="output"> output </p>-->
+        <!--</section>-->
+        <section id="contact" class="parallax-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-1 col-md-10 col-sm-12 text-center">
+					<h1 class="heading">Enter Business Preferences here:</h1>
+					<hr>
+				</div>
+				<div class="col-md-offset-1 col-md-10 col-sm-12 wow fadeIn"
+					data-wow-delay="0.9s">
+					<form action="map/the_zip_map.html" method="get">
+						<div class="col-md-6 col-sm-6">
+							<select name="category" class="form-control" id="category"
+								multiple="multiple">
+								<option value="categories">Choose category (multi-select):</option>
+								<option value="Restaurants">Restaurants</option>
+								<option value="Bars">Bars</option>
+								<option value="Coffee & Tea">Coffee & Tea</option>
+								<option value="Adult Entertainment">Adult Entertainment</option>
+								<option value="Chinese">Chinese</option>
+							</select>
+						</div>
+						<div class="col-md-6 col-sm-6">
+							<select name="AgesAllowed" class="form-control" id="AgesAllowed">
+								<option value="allages">Target Customers:</option>
+								<option value="18plus">18 and over</option>
+								<option value="21plus">21 and over</option>
+								<option value="allages">allages</option>
+							</select>
+						</div>
+						<!-- 						<div class="col-md-6 col-sm-6">
+							<select id="example-getting-started" multiple="multiple">
+								<option value="cheese">Cheese</option>
+								<option value="tomatoes">Tomatoes</option>
+								<option value="mozarella">Mozzarella</option>
+								<option value="mushrooms">Mushrooms</option>
+								<option value="pepperoni">Pepperoni</option>
+								<option value="onions">Onions</option>
+							</select> placeholder="Email">
+						</div>
+ -->
+						<div class="col-md-6 col-sm-6">
+							<select id="Smoking" class="form-control" name="Smoking">
+								<option value="yes">Smoking Allowed:</option>
+								<option value="yes">Yes</option>
+								<option value="no">No</option>
+								<option value="outdoor">Outdoor</option>
+							</select>
+						</div>
+						<div class="col-md-6 col-sm-6">
+							<select id="BusinessParking" class="form-control" name="BusinessParking">
+								<option value="yes">Business Parking:</option>
+								<option value="yes">Valet</option>
+								<option value="no">Lot</option>
+								<option value="outdoor">Garage</option>
+								<option value="outdoor">Street</option>
+							</select>
+						</div>
+						<div class="col-md-6 col-sm-6">
+							<select id="Smoking" class="form-control" name="Alcohol">
+								<option value="yes">Alcohol service:</option>
+								<option value="outdoor">Not served</option>
+								<option value="yes">full bar</option>
+								<option value="beer_and_wine">Beer and Wine</option>
+							</select>
+						</div>
+						<div class="col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6">
+							<input type="submit" class="form-control" id="submit"
+								value="See recommended locations"/>
+						</div>
+					</form>
+				</div>
+				<div class="col-md-2 col-sm-1"></div>
+			</div>
+		</div>
+	    </section>
     </aside>
 
 
@@ -39,8 +116,12 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
 
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBK1Kn7l-l0-UWCPdF2qHouueyo81RUWeY&libraries=places"></script>
     <script src="js/leaflet-gplaces-autocomplete.js"></script>
+
+    <script src="js/leaflet-heat.js"></script>
+
     <script src="js/add-content.js"></script>
 </body>
 </html>

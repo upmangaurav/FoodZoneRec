@@ -50,16 +50,25 @@ function addMarker(e){
     this.bindPopup(chagedPos.toString()).openPopup();
 
   });
-  pinLayers.push(marker)
+  pinLayers.push(marker);
 }
 
 
-var recommended_zips = ['89109', '85251', '85281', '85260', '89119', '89102', '89103', '85308', '85032', '85016', '89117']
-// , '85254', '89118', '89123', '85282', '89052', '89014', '89146', '89101', '85226', '89147', '85224', '85018', '89104', '28277', '85225', '89121', '85210', '89128', '85258', '53703', '85255', '85027', '61820', '85004', '85234', '89074', '28202', '85206', '85201', '85204', '85283', '85202', '15222', '89148', '85233', '', '28203', '85374', '85284', '89113', '85295', '85296', '89130', '85382', '85022', '28205', '85301', '85020', '28078', '89139', '89120', '53704', '28105', '85044', '44113', '15237', '85034', '28027', '85014', '89108', '89015', '44107', '53719', '85257', '89135', '89149', '28273', '89169', '85345', '85338', '85286', '28217', '85013', '89145', '28262', '89106', '85205', '28209', '85008', '70173', '89030', '89032', '44060', '85048', '85021', '28031', '85051', '85250', '89183', '85029', '89012', '44122', '85253', '28211', '15203', '85209', '85248', '89129', '85003', '15213', '85050', '44124', '89107', '85331', '85012', '85028', '85381', '15146', '85297', '85040', '85015', '44070', '85203', '85053', '85006', '44145', '44130', '28269', '28208', '53562', '28204', '28210', '44114', '89031', '85323', '85023', '89131', '89011', '15205', '15217', '85268', '85215', '53711', '28134', '44118']
+
+var recommended_zips = ['89109','89119','89102','89103','89117','89118','89052','89123','89014','89146'];
 var recommended_zips2 = ['85251','85281','85260','85308','85032','85016','85254','85282','85226','85224']
 var colors = ['#800026','#BD0026','#E31A1C','#FC4E2A','#FD8D3C','#FEB24C','#FED976','#FFEDA0','#ffffcc','#ffffcc'];
 // colors are get from the small tool: colorbrewer2.org
 // multihue sequential
+
+//TODO: The saved area list to be presented onto html
+//var selected_area_list = [];
+//function selectedAreas(thePolygon,zip){
+//    selected_area_list.push();
+//}
+// push to html
+//document.getElementById('output').innerHTML = selected_area_list;
+
 
 for (var k=0; k<recommended_zips.length;k++){
     var poly= null;
@@ -86,36 +95,68 @@ for (var k=0; k<recommended_zips.length;k++){
         });
         polyLayers.push(thePolygon)
         thePolygon.on('click', addMarker);
+        //TODO: double click to save the polyinformation
+        //thePolygon.on('click', selectedAreas(thePolygon,recommended_zips[k]));
     }
 }
 
-//for (var k=0; k<recommended_zips2.length;k++){
-//    var poly= null;
-//    for (var i=0; i<zip2.features.length;i++){
-//        if (zip2.features[i].properties.ZCTA5CE10 === recommended_zips2[k]){
-//            poly2 = zip2.features[i].geometry.coordinates;
-//        }
-//    }
+for (var k=0; k<recommended_zips2.length;k++){
+    var poly= null;
+    for (var i=0; i<zip2.features.length;i++){
+        if (zip2.features[i].properties.ZCTA5CE10 === recommended_zips2[k]){
+            poly2 = zip2.features[i].geometry.coordinates;
+        }
+    }
+
+    for (var i = 0; i < poly2.length; i++) {
+        for (var j = 0; j < poly2[i].length; j++) {
+            var v1 = poly2[i][j][0];
+            var v2 = poly2[i][j][1];
+            poly2[i][j] = [v2, v1];
+        }
+        var thePolygon2 = L.polygon(poly2[i],{color: colors[k]}).addTo(mymap);
+        //thePolygon2.bindPopup(recommended_zips[k]).openPopup()
+        thePolygon2.bindPopup("RecZip:" + recommended_zips2[k]);
+        thePolygon2.on('mouseover', function (e) {
+            this.openPopup();
+        });
+        thePolygon2.on('mouseout', function (e) {
+            this.closePopup();
+        });
+        polyLayers.push(thePolygon2)
+        thePolygon2.on('click', addMarker);
+    }
+}
+
+//TODO: heatmap variables
+//[
+//  {
+//  89147: {(115.298, 36.1122), (-115.298, 36.1122)},
+//  89139: {(-115.224, 36.0402), (-115.226 36.0553)},
+//  89130: {(-115.21, 36.2376), (-115.214, 36.2166)},
+//  89146: {(-115.225, 36.1272), (-115.224, 36.1326)}
+//  }
+//]
+
+//TODO: The way to add a heatmap
+//$.getJSON("rodents.geojson",function(data){
+//   var locations = data.features.map(function(rat) {
+//    var location = rat.geometry.coordinates.reverse();
+//    location.push(0.5);
+//    return location;
+//  });
 //
-//    for (var i = 0; i < poly2.length; i++) {
-//        for (var j = 0; j < poly2[i].length; j++) {
-//            var v1 = poly2[i][j][0];
-//            var v2 = poly2[i][j][1];
-//            poly2[i][j] = [v2, v1];
-//        }
-//        var thePolygon2 = L.polygon(poly2[i],{color: colors[k]}).addTo(mymap);
-//        //thePolygon2.bindPopup(recommended_zips[k]).openPopup()
-//        thePolygon2.bindPopup("RecZip:" + recommended_zips2[k]);
-//        thePolygon2.on('mouseover', function (e) {
-//            this.openPopup();
-//        });
-//        thePolygon2.on('mouseout', function (e) {
-//            this.closePopup();
-//        });
-//        polyLayers.push(thePolygon2)
-//        thePolygon2.on('click', addMarker);
-//    }
-//}
+//  var heat = L.heatLayer(locations, { radius: 35 });
+//  map.addLayer(heat);
+//});
+
+var heat = L.heatLayer([[36.1122,-115.298], [36.1122,-115.298],
+    [36.0402,-115.224],[36.0553,-115.226],[36.2376,-115.21],
+    [36.2166,-115.214],[36.1272,-115.225], [36.1326,-115.224]],
+    {blur: 5}).addTo(mymap);
+//drawnPolys.addLayer(heat)
+//drawnPolys.addTo(mymap)
+
 
 for(layer of polyLayers){
     drawnPolys.addLayer(layer)

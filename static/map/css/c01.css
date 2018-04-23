@@ -1,15 +1,113 @@
-/*@import url('https://fonts.googleapis.com/css?family=Tangerine')*/
+h1,
+section,
+aside,
+
+
 h1{
-  font-family: 'Amatic+SC', cursive;
-  font-size: 48px;
-  text-shadow: 4px 4px 4px #aaa;
-  text-transform: uppercase;
+  font-family: 'Roboto', sans-serif;
+  font-size: 22px;
+  /*text-shadow: 4px 4px 4px #aaa;*/
+  /*text-transform: uppercase;*/
   letter-spacing: 0.2em;
   text-align : center;
 }
 
 body{
-    background-color = #ffffff
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    position: relative;
+
+    .heading {
+        font-size: 22px;
+        font-weight: 500;
+    }
+
+    .subheading {
+        font-size: 16px;
+        padding-bottom: 60px;
+    }
+
+    p {
+        color: #848484;
+        font-weight: 400;
+        font-size: 16px;
+        letter-spacing: 0.4px;
+        line-height: 28px;
+    }
+
+    hr {
+	    border-top: 2px solid #828282;
+	    width: 120px;
+    }
+
+
 }
 
-#mapid { height: 600px;}
+#themap {
+    float: left;
+    width: 63%;
+}
+
+#mapid {
+        height: 550px;
+}
+
+/* contact section */
+#contact {
+  padding-top: 80px;
+  padding-bottom: 100px;
+}
+#contact .col-md-8 {
+  margin-bottom: 32px;
+}
+#contact .form-control {
+  background: #ffffff;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: all 0.4s ease-in-out;
+}
+#contact .form-control:focus {
+  border-color: #f9f9f9;
+}
+#contact input {
+  height: 48px;
+}
+#contact input[type="submit"] {
+  background: transparent;
+  border: 2px solid #999;
+  border-radius: 10px;
+  letter-spacing: 2px;
+  margin-top: 12px;
+  height: 50px;
+}
+#contact input[type="submit"]:hover {
+  background: #999;
+  color: #ffffff;
+}
+#contact {
+  background: #f0f0f0;
+}
+.parallax-section {
+  background-attachment: fixed !important;
+  background-size: cover !important;
+
+
+
+
+aside {
+    display: block;
+    height: 610px
+    width: 30 %;
+    float: right;
+    padding: 0px 0px 0px 20px;
+}
+
+#container{
+    display: block;
+    width: 30 %;
+    float: right;
+    padding: 0px 0px 0px 20px;
+}
