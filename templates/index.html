@@ -50,7 +50,7 @@ $(function() {
 <link href='https://fonts.googleapis.com/css?family=Roboto:400,500'
 	rel='stylesheet' type='text/css'>
 </head>
-<body onload='document.forms[0].submit()'>
+<body>
 
 	<!-- preloader section -->
 	<section class="preloader">
@@ -88,8 +88,8 @@ $(function() {
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12 col-sm-12">
-					<h1>A really un-original design</h1>
-					<h2>To recommend your new Food-biz location</h2>
+					<h1>let us help you</h1>
+					<h2>Figure out your new Food Business Location</h2>
 					<a href="#contact" class="smoothScroll btn btn-default">Enter
 						Business Preferences</a>
 				</div>
@@ -129,6 +129,13 @@ $(function() {
 						<h3>Las Vegas, NV</h3>
 						<span>Casino / Parties / Adult Entertainment</span>
 					</div>
+					<a href="static/images/Henderson.jpg"
+						data-lightbox-gallery="zenda-gallery"><img
+						src="static/images/Henderson.jpg" alt="gallery img"></a>
+					<div>
+						<h3>Henderson, NV</h3>
+						<span>Outskirts of Las Vegas</span>
+					</div>
 				</div>
 				<div class="col-md-4 col-sm-4 wow fadeInUp" data-wow-delay="0.9s">
 					<a href="static/images/tempe-arizona.jpg"
@@ -138,9 +145,9 @@ $(function() {
 						<h3>Tempe, AZ</h3>
 						<span>University town, 10mi from Phoenix</span>
 					</div>
-					<a href="static/images/glendale.jpg"
+					<a href="static/images/Glendale-AZ.jpg"
 						data-lightbox-gallery="zenda-gallery"><img
-						src="static/images/glendale.jpg" alt="gallery img"></a>
+						src="static/images/Glendale-AZ.jpg" alt="gallery img"></a>
 					<div>
 						<h3>Glendale, AZ</h3>
 						<span> &lt;15 miles from Phonenix</span>
@@ -234,9 +241,10 @@ $(function() {
 				</div>
 				<div class="col-md-offset-1 col-md-10 col-sm-12 wow fadeIn"
 					data-wow-delay="0.9s">
-					<form action="static/map/the_zip_map.html" method="get">
-<!-- 					<form action="predict" method='GET' enctype='text/plain'>
- -->						<div class="col-md-6 col-sm-6">
+<!-- 					<form action="static/map/the_zip_map.html" method="get">
+ -->
+ 					<form action="predict" method='GET' enctype='text/plain'>	
+ 					<div class="col-md-6 col-sm-6">
 							<select name="category" class="form-control" id="category"
 								multiple="multiple">
 								<option disabled selected value> -- Categories (multi-select) -- </option>
@@ -346,7 +354,7 @@ $(function() {
 							data-wow-delay="0.9s"></a></li>
 						<li><a href="#" class="fa fa-dribbble wow bounceIn"
 							data-wow-delay="0.9s"></a></li>
-						<li><a href="#" class="fa fa-github wow bounceIn"
+						<li><a href="https://github.com/upmangaurav/CS526_FoodZoneRec" class="fa fa-github wow bounceIn"
 							data-wow-delay="0.9s"></a></li>
 					</ul>
 				</div>

@@ -3,7 +3,7 @@ import json
 import pandas as pd
 import numpy as np
 import dill as pickle
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect, url_for
 from flaskext.mysql import MySQL
 
 app = Flask(__name__)
@@ -78,7 +78,7 @@ def generate_binary_vectors(businesses):
 
     return businesses
 
-# MySQL thing starts here...
+# MySQL config starts here...
 app = Flask(__name__)
 mysql = MySQL()
 app.config['MYSQL_DATABASE_USER'] = 'ruyelp'
@@ -86,13 +86,14 @@ app.config['MYSQL_DATABASE_PASSWORD'] = 'ruyelp'
 app.config['MYSQL_DATABASE_DB'] = 'yelp_db'
 app.config['MYSQL_DATABASE_HOST'] = 'ec2-13-58-178-201.us-east-2.compute.amazonaws.com'
 mysql.init_app(app)
+# MySQL config ends ...
 
 
 @app.route('/welcome')
 def welcome():
     return render_template('index.html')  # render a template
 
-@app.route('/predict/', methods=['GET'])
+@app.route('/predict', methods=['GET', 'POST'])
 # @app.route('/predict/<string:parameters>')
 def apicall():
     try:
@@ -143,8 +144,7 @@ def apicall():
         
         probabilities = loaded_model.predict_proba(features)
         best_n = np.argsort(-probabilities, axis = 1)
-#         print(best_n[0][:10])
-#         print(y_test[0])
+
         with open('attributeLists.json', 'r') as f:
             attributeLists = json.load(f)
         n_top = 10
@@ -154,36 +154,33 @@ def apicall():
         
         conn = mysql.connect()
         cursor =conn.cursor()
-        cats = request.args.getlist('category')
-        print(cats)
         
-#         placeholder= '?' # For SQLite. See DBAPI paramstyle.
-#         placeholders= ', '.join(placeholder * len(cats))
-#         print(placeholders)
-        
-        query = 'select business.latitude, business.longitude from business, category where category.business_id = business.id and postal_code in(' + ','.join(map(str, topZips)) + ') and category in {0} '.format(tuple(cats))
-        
+        cats = tuple(request.args.getlist('category'))
+        if(len(request.args.getlist('category'))==1):
+            query = "select business.latitude, business.longitude from business, category where category.business_id = business.id and postal_code in(" + ",".join(map(str, topZips)) + ") and category = '" + cats[0] + "'"
+
+        else:
+            query = 'select business.latitude, business.longitude from business, category where category.business_id = business.id and postal_code in(' + ','.join(map(str, topZips)) + ') and category in {0} '.format(cats)
+                
         print(query)
         
         cursor.execute(query)
 
-        
-#         tl = tuple(topZips)
-#         param = {'tl', tl}
-        
-#         cursor.execute("select latitude, longitude from business where postal_code in(" + ",".join(map(str, topZips)) + ")")
-#         cursor.execute("select business.latitude, business.longitude from business, category where category.business_id = business.id and postal_code in(" + ",".join(map(str, topZips)) + ") and category in(" + ",".join(map(str, cats)) + ")")
-
         data = cursor.fetchall()
-        print(data)
-        print(len(data))
-        print(type(data))
         
-        return jsonify(data)
+#         return redirect(url_for('recommendations', coordinates = data, recommendations = topZips))
+        return render_template("the_zip_map.html", coordinates = data, recommendations = topZips)
+    
+#         return jsonify(data)
+
         
 
     except Exception as e:
         raise e
+
+@app.route('/recommendations')
+def recommendations():
+    return render_template('the_zip_map.html', zips=request.args.get('recommendations'), coords=request.args.get('coordinates'))  # render a template
 
 
 @app.errorhandler(400)

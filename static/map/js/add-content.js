@@ -10,26 +10,69 @@ newMarkerGroup = new L.LayerGroup();
 mymap.on('click', addMarker);
 
 drawnItems = L.featureGroup();
-//mymap.addControl(new L.Control.Draw({
-//	edit: {
-//		featureGroup: drawnItems,
-//	},
-//	draw: {
-//		polygon : {
-//			showArea:true
-//		}
-//	}
-//}));
+
+var heat = L.heatLayer(coordinates, {blur: 5}).addTo(mymap);
+
+
+var testlist = coordinates
+
+var count = 0;
+var latmin = 100;
+var lngmin = 100;
+var latmax = -100;
+var lngmax = -100;
 
 mymap.on(L.Draw.Event.CREATED, function(event) {
+    var type = event.layerType;
 	var layer = event.layer;
-	drawnItems.addLayer(layer);
+	//get information when user finishes editing a shape on draw tool
+
+	//TODO: this was working
+	//drawnItems.addLayer(layer);
+	//console.log('draw:created->');
+
+//    {"type":"Feature","properties":{},
+//    "geometry":{"type":"Polygon","coordinates":
+//        [[[-115.237631,36.14355],[-115.237631,36.14355],[-115.200812,36.141609],[-115.200812,36.141609],[-115.233386,36.102229],[-115.233124,36.102229],[-115.237592,36.14355],[-115.237631,36.14355]]]
+//        }}
+
+	var drawngeojson = layer.toGeoJSON();
+	coords = drawngeojson["geometry"]["coordinates"][0]
+
+
+	//find minmax of latlog
+
+	for (var c=0; c<coords.length; c++){
+	    if (coords[c][0]< latmin){
+	        latmin = coords[c][0];
+	    }
+	    if (coords[c][0]> latmax){
+	        latmax = coords[c][0];
+	    }
+	    if (coords[c][1]< lngmin){
+	        lngmin = coords[c][1];
+	    }
+	    if (coords[c][1]> lngmax){
+	        lngmax = coords[c][1];
+	    }
+	}
+
+	count = 0;
+
+    for (var t=0; t<testlist.length; t++){
+        if(testlist[t][0] > lngmin && testlist[t][0] < lngmax && testlist[t][1] > latmin && testlist[t][1] < latmax){
+            count += 1;
+        }
+    }
+
+    drawnItems.addLayer(layer).bindPopup("Potential same category competitiors : " + count.toString()).addTo(mymap);
 });
 
 
 var drawnPolys = new L.FeatureGroup();
 var drawnMarkers = new L.FeatureGroup();
 mymap.addLayer(drawnPolys)
+
 var polyLayers = [];
 var pinLayers = [];
 
@@ -54,9 +97,20 @@ function addMarker(e){
 }
 
 
+var recommended_zips = [];
+var recommended_zips2 = [];
 
-var recommended_zips = ['89109','89119','89102','89103','89117','89118','89052','89123','89014','89146'];
-var recommended_zips2 = ['85251','85281','85260','85308','85032','85016','85254','85282','85226','85224']
+for (var z = 0; z < recommended_zip.length; z++){
+  if(recommended_zip[z][1] == 9){
+    recommended_zips.push(recommended_zip[z]);
+  }
+  else
+    recommended_zips2.push(recommended_zip[z]);
+}
+
+
+// var recommended_zips = ['89109','89119','89102','89103','89117','89118','89052','89123','89014','89146'];
+// var recommended_zips2 = ['85251','85281','85260','85308','85032','85016','85254','85282','85226','85224']
 var colors = ['#800026','#BD0026','#E31A1C','#FC4E2A','#FD8D3C','#FEB24C','#FED976','#FFEDA0','#ffffcc','#ffffcc'];
 // colors are get from the small tool: colorbrewer2.org
 // multihue sequential
@@ -86,7 +140,7 @@ for (var k=0; k<recommended_zips.length;k++){
         }
         var thePolygon = L.polygon(poly[i],{color: colors[k]}).addTo(mymap);
         //thePolygon.bindPopup(recommended_zips[k]).openPopup()
-        thePolygon.bindPopup("RecZip:" + recommended_zips[k]);
+        thePolygon.bindPopup("ZipCode: " + recommended_zips[k]);
         thePolygon.on('mouseover', function (e) {
             this.openPopup();
         });
@@ -116,7 +170,7 @@ for (var k=0; k<recommended_zips2.length;k++){
         }
         var thePolygon2 = L.polygon(poly2[i],{color: colors[k]}).addTo(mymap);
         //thePolygon2.bindPopup(recommended_zips[k]).openPopup()
-        thePolygon2.bindPopup("RecZip:" + recommended_zips2[k]);
+        thePolygon2.bindPopup("ZipCode: " + recommended_zips2[k]);
         thePolygon2.on('mouseover', function (e) {
             this.openPopup();
         });
@@ -150,12 +204,15 @@ for (var k=0; k<recommended_zips2.length;k++){
 //  map.addLayer(heat);
 //});
 
-var heat = L.heatLayer([[36.1122,-115.298], [36.1122,-115.298],
-    [36.0402,-115.224],[36.0553,-115.226],[36.2376,-115.21],
-    [36.2166,-115.214],[36.1272,-115.225], [36.1326,-115.224]],
-    {blur: 5}).addTo(mymap);
+
+
+// var heat = L.heatLayer([[36.1122,-115.298], [36.1122,-115.298],
+//     [36.0402,-115.224],[36.0553,-115.226],[36.2376,-115.21],
+//     [36.2166,-115.214],[36.1272,-115.225], [36.1326,-115.224]],
+//     {blur: 5}).addTo(mymap);
 //drawnPolys.addLayer(heat)
 //drawnPolys.addTo(mymap)
+
 
 
 for(layer of polyLayers){
@@ -176,69 +233,4 @@ new L.Control.GPlaceAutocomplete({
 		mymap.setView( [loc.lat(), loc.lng()], 12);
 	}
 }).addTo(mymap);
-
-/*
-var poly= null;
-for (var i=0; i<zip.features.length;i++){
-    if (zip.features[i].properties.ZCTA5CE10 === '89032'){
-        poly = zip.features[i].geometry.coordinates;
-    }
-}
-
-
-
-for (var i = 0; i < poly.length; i++) {
-    for (var j = 0; j < poly[i].length; j++) {
-        var v1 = poly[i][j][0];
-        var v2 = poly[i][j][1];
-        poly[i][j] = [v2, v1];
-    }
-}
-//marker.bindPopup("<b>Start your business in Las Vegas!</b><br> Select your preference and begin to explore.").openPopup();
-//polygon.bindPopup("Recommended Area #1.").openPopup();
-//var polygon = L.polygon(poly).addTo(mymap);
-for (var i = 0; i < poly.length; i++) {
-    var polygon = L.polygon(poly[i]).addTo(mymap);
-}
-*/
-
-
-
-//circle.bindPopup("I am a circle.");
-
-/*
-var jsonFeatures = [];
-data.forEach(function(point){
-    var lat = point.latitud;
-    var lon = point.longtitude;
-
-    var feature = {type: 'Feature',
-        properties: point,
-        geometry: {
-            type: 'Point',
-            coordinates: [lon, lat]
-        }
-    };
-    jsonFeatures.push(feature);
-});
-
-var geoJson = {type: 'FeatureCollection', features: jsonFeatures};
-
-*/
-
-//Use jquery Ajax to load data and then add it.
-
-/*var district_boundary = new L.geoJson();
-district_boundary.addTo(mymap);
-$.ajax({
-dataType: "json",
-url:"nv_nevada_zip_codes_geo.min.json",
-success: function(data) {
-    $(data.features).each(function(key,data) {
-        district_boundary.addData(data);
-    });
-}
-}).error(function() {});
-*/
-
 
