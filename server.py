@@ -7,7 +7,7 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for
 from flaskext.mysql import MySQL
 
 app = Flask(__name__)
-os.chdir("/media/gu38/Common/DIVA/FinalProject/yelp/git_DIVA/CS526_FoodZoneRec/dataset/")
+os.chdir("./dataset/")
 
 '''
 This function concatenates all the feature vectors for input and flattens the Label data
