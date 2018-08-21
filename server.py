@@ -154,7 +154,7 @@ def apicall():
         
         conn = mysql.connect()
         cursor =conn.cursor()
-        
+        cursor._defer_warnings = True        
         cats = tuple(request.args.getlist('category'))
         if(len(request.args.getlist('category'))==1):
             query = "select business.latitude, business.longitude from business, category where category.business_id = business.id and postal_code in(" + ",".join(map(str, topZips)) + ") and category = '" + cats[0] + "'"
